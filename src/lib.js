@@ -35,7 +35,7 @@ class Component {
     if (this.props.notify_parent) {
       delete this.props.notify_parent;
       this.parent.render();
-    } else elm.render();
+    } else this.render();
   }
   render(into) {
     if (into) this.container = into.appendChild(create('div'));
