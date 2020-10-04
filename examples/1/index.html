@@ -8,7 +8,7 @@
 <body>
   <script type="text/javascript">
     const randint = max => Math.floor(Math.random() * max);
-    const randrange = (min, max) => min + Math.floor(Math.random() * (max - min));
+    const randrange = (min, max) => min + randint(max - min);
     const select_random = arr => arr[randint(arr.length)];
 
     class App extends Component {
@@ -29,7 +29,9 @@
       }
 
       pick_food() {
-        this.set({ food: select_random(['Pizza', 'Pasta', 'Apples', 'Kale', 'Radish']) })
+        this.set({
+          food: select_random(['Pizza', 'Pasta', 'Apples', 'Kale', 'Radish'])
+        });
       }
     }
 
