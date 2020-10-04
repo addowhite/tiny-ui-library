@@ -1,9 +1,17 @@
 const get = document.getElementById.bind(document);
 const html = str => create('template', { innerHTML: str }).content;
+const create = (tagname, attrs) => {
+  const el = document.createElement(tagname);
+  if (attrs && attrs.innerHTML && !attrs.innerHTML.charAt) {
+    el.appendChild(create_frag(attrs.innerHTML));
+    delete attrs.innerHTML;
+  }
+  return Object.assign(el, attrs);
+}
 const create_frag = (obj, parent) => {
   if (obj instanceof Component) {
     if (parent) obj.parent = parent;
-    obj.container = create('div', { className: obj.props.className || '', style: obj.props.style });
+    obj.container = create(obj.container?.tagName || 'div', { id: obj.container?.id || '', className: obj.props.className || '', style: obj.props.style });
     obj.container.appendChild(create_frag(obj.construct(), obj));
     return obj.container;
   } else if (obj.indexOf) {
@@ -16,14 +24,6 @@ const create_frag = (obj, parent) => {
   }
   return obj;
 }
-const create = (tagname, attrs) => {
-  const el = document.createElement(tagname);
-  if (attrs && attrs.innerHTML && !attrs.innerHTML.charAt) {
-    el.appendChild(create_frag(attrs.innerHTML));
-    delete attrs.innerHTML;
-  }
-  return Object.assign(el, attrs);
-}
 class Component {
   constructor(props, container) {
     this.props = props || {};
@@ -31,14 +31,11 @@ class Component {
   }
   set(props) {
     if ('className' in props) this.container.className = props.className;
-    if (props.notify_parent) {
-      delete props.notify_parent;
-      Object.assign(this.props, props);
+    Object.assign(this.props, props);
+    if (this.props.notify_parent) {
+      delete this.props.notify_parent;
       this.parent.render();
-    } else {
-      Object.assign(this.props, props);
-      this.render();
-    }
+    } else elm.render();
   }
   render(into) {
     if (into) this.container = into.appendChild(create('div'));
