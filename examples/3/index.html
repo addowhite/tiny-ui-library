@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example 3</title>
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Roboto, Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header, footer {
+      width: 100%;
+      width: Calc(100% - 2em);
+      margin: 0;
+      padding: 1em;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    header {
+      margin-bottom: 2em;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2em;
+      padding: 2em 1em;
+    }
+
+    main {
+      width: 80%;
+      max-width: 30em;
+      margin: auto;
+    }
+
+    .counter {
+      width: 100%;
+      width: Calc(100% - 2em);
+      margin: 1em 0;
+      padding: 1em;
+      margin: auto;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    button {
+      color: #f5f5f5;
+      background-color: #0088AA;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 2px;
+    }
+  </style>
+  <script type="text/javascript" src="../../src/lib.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="text/javascript">
+    class App extends Component {
+      constructor() {
+        super(...arguments);
+        this.container = document.body;
+      }
+      construct() {
+        return [
+          `<header><h1>Counter Example</h1></header>`,
+          create('main', { innerHTML: new Counter() }),
+          `<footer>Copyright &copy; countersRus @ count.up</footer>`
+        ];
+      }
+    }
+
+    class Counter extends Component {
+      constructor() {
+        super(...arguments);
+        this.props.count = this.props.count || 0;
+      }
+      construct() {
+        return create('div', {
+          className: 'counter',
+          innerHTML: [
+            `<h2>Count: ${this.props.count}</h2>`,
+            create('button', {
+              type: 'button',
+              innerHTML: 'Increment',
+              onclick: () => this.set({ count: this.props.count + 1 })
+            })
+          ]
+        })
+      }
+    }
+
+    new App().render();
+  </script>
+</body>
+</html>

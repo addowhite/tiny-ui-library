@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example 1</title>
+  <script type="text/javascript" src="../../src/lib.js"></script>
+</head>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="text/javascript">
+    const randint = max => Math.floor(Math.random() * max);
+    const randrange = (min, max) => min + Math.floor(Math.random() * (max - min));
+    const select_random = arr => arr[randint(arr.length)];
+
+    class App extends Component {
+      construct() {
+        return ['Harry', 'James', 'Peter', 'Bobby', 'Charles'].map(name => new Person({name}));
+      }
+    }
+
+    class Person extends Component {
+      constructor(...args) {
+        super(...args);
+        this.pick_food();
+      }
+
+      construct() {
+        setTimeout(this.pick_food.bind(this), randrange(1000, 2000));
+        return [
+          `<p>${this.props.name}'s favorite food is ${this.props.food}</p>`
+        ];
+      }
+
+      pick_food() {
+        this.set({ food: select_random(['Pizza', 'Pasta', 'Apples', 'Kale', 'Radish']) })
+      }
+    }
+
+    new App({}, get('app')).render();
+  </script>
+</body>
+</html>
