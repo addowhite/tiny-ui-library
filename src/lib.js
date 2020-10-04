@@ -1,22 +1,24 @@
 const get = document.getElementById.bind(document);
 const html = str => create('template', { innerHTML: str }).content;
-const create_frag = (arr, parent) => {
-  if (!arr.indexOf || arr.charAt) arr = [arr];
-  const frag = document.createDocumentFragment();
-  for (const elm of arr)
-    if (elm instanceof Component) {
-      elm.parent = parent;
-      elm.container = create('div', { style: elm.props.style, className: elm.props.className });
-      elm.container.appendChild(create_frag(elm.construct(), elm));
-      frag.appendChild(elm.container);
+const create_frag = (obj, parent) => {
+  if (obj instanceof Component) {
+    if (parent) obj.parent = parent;
+    obj.container = create('div', { className: obj.props.className || '', style: obj.props.style });
+    obj.container.appendChild(create_frag(obj.construct(), obj));
+    return obj.container;
+  } else if (obj.indexOf) {
+    if (obj.charAt) return html(obj);
+    else {
+      const frag = document.createDocumentFragment();
+      for (const elm of obj) frag.appendChild(create_frag(elm, parent));
+      return frag;
     }
-    else if (elm.indexOf && elm.charAt) frag.appendChild(html(elm));
-    else frag.appendChild(elm);
-  return frag;
+  }
+  return obj;
 }
 const create = (tagname, attrs) => {
   const el = document.createElement(tagname);
-  if (attrs.innerHTML && !attrs.innerHTML.charAt) {
+  if (attrs && attrs.innerHTML && !attrs.innerHTML.charAt) {
     el.appendChild(create_frag(attrs.innerHTML));
     delete attrs.innerHTML;
   }
@@ -28,10 +30,7 @@ class Component {
     this.container = container;
   }
   set(props) {
-    if ('className' in props) {
-      this.container.className = props.className;
-      delete props.className;
-    }
+    if ('className' in props) this.container.className = props.className;
     if (props.notify_parent) {
       delete props.notify_parent;
       Object.assign(this.props, props);
@@ -41,10 +40,9 @@ class Component {
       this.render();
     }
   }
-  render() {
+  render(into) {
+    if (into) this.container = into.appendChild(create('div'));
     if (!this.container) return;
-    this.container.innerHTML = '';
-    this.container.appendChild(create_frag(this.construct(), this));
-    return this;
+    this.container.replaceWith(create_frag(this));
   }
 }

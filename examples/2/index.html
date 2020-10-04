@@ -65,6 +65,10 @@
   <div id="app"></div>
   <script type="text/javascript">
     class App extends Component {
+      constructor() {
+        super(...arguments);
+        this.props.className = 'app';
+      }
       construct() {
         return [
           `<header><h1>Shopping List Example</h1></header>`,
