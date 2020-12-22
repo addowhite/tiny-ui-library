@@ -21,7 +21,8 @@ const create_frag = (obj, parent) => {
       for (const elm of obj) frag.appendChild(create_frag(elm, parent));
       return frag;
     }
-  }
+  } else if (typeof obj === "number")
+    return html(String(obj));
   return obj;
 }
 class Component {
