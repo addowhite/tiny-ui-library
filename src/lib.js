@@ -11,7 +11,7 @@ const create = (tagname, attrs) => {
 const create_frag = (obj, parent) => {
   if (obj instanceof Component) {
     if (parent) obj.parent = parent;
-    obj.container = create(obj.tagName || obj.container?.tagName || 'div', { id: obj.id || obj.container?.id || '', className: obj.props.className || '', style: obj.props.style });
+    obj.container = create(obj.tagName || obj.container?.tagName || 'div', { id: obj.id || obj.container?.id || '', className: obj.props.className || '', style: obj.props.style, onclick: obj.props.onclick });
     obj.container.appendChild(create_frag(obj.construct(), obj));
     return obj.container;
   } else if (obj.indexOf) {
