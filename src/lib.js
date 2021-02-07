@@ -18,7 +18,7 @@ const create_frag = (obj, parent) => {
     if (obj.charAt) return html(obj);
     else {
       const frag = document.createDocumentFragment();
-      for (const elm of obj) frag.appendChild(create_frag(elm, parent));
+      for (const elm of obj) if (elm) frag.appendChild(create_frag(elm, parent));
       return frag;
     }
   } else if (typeof obj === "number")
